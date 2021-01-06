@@ -1,12 +1,13 @@
-import logo from '../../logo.svg';
+import logo from '../../assets/images/logo.png';
 import Navbar from 'react-bootstrap/Navbar';
 import { Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
+import { useState } from 'react';
 
 const Header = () => {
+    const [expanded, setExpanded] = useState(false);
     return (
-        <Navbar bg="dark" variant="dark">
+        <Navbar expanded={expanded} collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Navbar.Brand>
                 <img
                     alt=""
@@ -15,17 +16,20 @@ const Header = () => {
                     height="30"
                     className="d-inline-block align-top"
                 />{' '}
-                encodR
+                <span style={{ fontSize: 25 }}>ncodR</span>
             </Navbar.Brand>
-            <Nav className="mr-auto">
-                <Link className="nav-link" role="button" to="/">Base64 Encode/Decode</Link>
-                <Link className="nav-link" role="button" to="/urlencode">URL Encode/Decode</Link>
-                <Link className="nav-link" role="button" to="/jsonminify">JSON Minify/Beautify</Link>
-                <Link className="nav-link" role="button" to="/jsminify">JS Minify/Beautify</Link>
-                <Link className="nav-link" role="button" to="/cssminify">CSS Minify/Beautify</Link>
-            </Nav>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" onClick={() => setExpanded(!expanded)} />
+            <Navbar.Collapse id="responsive-navbar-nav">
+                <Nav className="mr-auto">
+                    <Link className="nav-link" role="button" to="/" onClick={() => setExpanded(false)}>Base64 Encode/Decode</Link>
+                    <Link className="nav-link" role="button" to="/urlencode" onClick={() => setExpanded(false)}>URL Encode/Decode</Link>
+                    <Link className="nav-link" role="button" to="/jsonminify" onClick={() => setExpanded(false)}>JSON Minify/Beautify</Link>
+                    <Link className="nav-link" role="button" to="/jsminify" onClick={() => setExpanded(false)}>JS Minify/Beautify</Link>
+                    <Link className="nav-link" role="button" to="/cssminify" onClick={() => setExpanded(false)}>CSS Minify/Beautify</Link>
+                </Nav>
+            </Navbar.Collapse>
         </Navbar>
     );
 }
-
 export default Header;
+
