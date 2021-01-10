@@ -13,7 +13,8 @@ class Base64_Route extends Component {
             splitToChunks: false
         }
     }
-    changeMode = (val) => {
+
+    changeMode = (val) => { 
         this.setState({ mode: val });
     }
 
@@ -41,8 +42,6 @@ class Base64_Route extends Component {
 
     unicodeBase64Decode = (text) => { return decodeURIComponent(Array.prototype.map.call(window.atob(text), function (c) { return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); }).join('')); }
     unicodeBase64Encode = (text) => { return window.btoa(encodeURIComponent(text).replace(/%([0-9A-F]{2})/g, function (match, p1) { return String.fromCharCode('0x' + p1); })); }
-    unicodeURLDecode = (text) => { return decodeURIComponent(text); }
-    unicodeURLEncode = (text) => { return encodeURIComponent(text).replace(/[!'()*]/g, function (c) { return ('%' + c.charCodeAt(0).toString(16).toUpperCase()); }); }
 
     actionHandler = () => {
         console.log("actionHandler: start");
@@ -69,9 +68,9 @@ class Base64_Route extends Component {
                     case "Decode":
                         console.log("actionHandler: decoding");
                         switch (this.state.charset) {
-                            case "ASCII": output = atob(this.state.inputText);
+                            case "ASCII": output = atob(this.state.inputText.replace(/\n/g, ''));
                                 break;
-                            case "Unicode": output = this.unicodeBase64Decode(this.state.inputText);
+                            case "Unicode": output = this.unicodeBase64Decode(this.state.inputText.replace(/\n/g, ''));
                                 break;
                             default:
                                 break;
