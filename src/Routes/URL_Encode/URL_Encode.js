@@ -13,8 +13,8 @@ class URL_Route extends Component {
             splitToChunks: false
         }
     }
-    
-    changeMode = (val) => { 
+
+    changeMode = (val) => {
         this.setState({ mode: val });
     }
 
@@ -29,16 +29,16 @@ class URL_Route extends Component {
     }
 
     chunkString = (str, len) => {
-        const size = Math.ceil(str.length/len)
+        const size = Math.ceil(str.length / len)
         const r = Array(size)
         let offset = 0
-        
+
         for (let i = 0; i < size; i++) {
-          r[i] = str.substr(offset, len)
-          offset += len
+            r[i] = str.substr(offset, len)
+            offset += len
         }
         return r
-      }
+    }
 
     unicodeURLDecode = (text) => { return decodeURIComponent(text); }
     unicodeURLEncode = (text) => { return encodeURIComponent(text).replace(/[!'()*]/g, function (c) { return ('%' + c.charCodeAt(0).toString(16).toUpperCase()); }); }
@@ -60,9 +60,9 @@ class URL_Route extends Component {
                             default:
                                 break;
                         }
-                        
+
                         if (output.length > 76 && this.state.splitToChunks) {
-                            output = this.chunkString(output,76).join('\n');
+                            output = this.chunkString(output, 76).join('\n');
                         }
                         break;
                     case "Decode":
@@ -80,18 +80,18 @@ class URL_Route extends Component {
                         break;
                 }
             } catch (e) {
-                
+
                 output = "Error encoding/decoding the requested message, perhaps you are using the incorrect character set? try using UTF-8.";
             }
-            
+
             console.log("actionHandler: output = ", output);
             this.setState({ outputText: output });
         }
     }
 
     render() {
-        let options='';
-        if(this.state.mode==="Encode") {
+        let options = '';
+        if (this.state.mode === "Encode") {
             options = <Form.Check inline label="Split lines into 76 character chunks (for MIME)" type="checkbox" id="splitToChunks" name="splitToChunks" checked={this.state.splitToChunks} onChange={this.handleChange} />;
         }
         return (
@@ -133,5 +133,5 @@ class URL_Route extends Component {
         );
     }
 }
- 
+
 export default URL_Route;

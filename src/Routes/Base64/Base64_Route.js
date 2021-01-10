@@ -14,7 +14,7 @@ class Base64_Route extends Component {
         }
     }
 
-    changeMode = (val) => { 
+    changeMode = (val) => {
         this.setState({ mode: val });
     }
 
@@ -29,16 +29,16 @@ class Base64_Route extends Component {
     }
 
     chunkString = (str, len) => {
-        const size = Math.ceil(str.length/len)
+        const size = Math.ceil(str.length / len)
         const r = Array(size)
         let offset = 0
-        
+
         for (let i = 0; i < size; i++) {
-          r[i] = str.substr(offset, len)
-          offset += len
+            r[i] = str.substr(offset, len)
+            offset += len
         }
         return r
-      }
+    }
 
     unicodeBase64Decode = (text) => { return decodeURIComponent(Array.prototype.map.call(window.atob(text), function (c) { return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); }).join('')); }
     unicodeBase64Encode = (text) => { return window.btoa(encodeURIComponent(text).replace(/%([0-9A-F]{2})/g, function (match, p1) { return String.fromCharCode('0x' + p1); })); }
@@ -60,9 +60,9 @@ class Base64_Route extends Component {
                             default:
                                 break;
                         }
-                        
+
                         if (output.length > 76 && this.state.splitToChunks) {
-                            output = this.chunkString(output,76).join('\n');
+                            output = this.chunkString(output, 76).join('\n');
                         }
                         break;
                     case "Decode":
@@ -82,15 +82,15 @@ class Base64_Route extends Component {
             } catch (e) {
                 output = "Error encoding/decoding the requested message, perhaps you are using the incorrect character set? try using UTF-8.";
             }
-            
+
             console.log("actionHandler: output = ", output);
             this.setState({ outputText: output });
         }
     }
 
     render() {
-        let options='';
-        if(this.state.mode==="Encode") {
+        let options = '';
+        if (this.state.mode === "Encode") {
             options = <Form.Check inline label="Split lines into 76 character chunks (for MIME)" type="checkbox" id="splitToChunks" name="splitToChunks" checked={this.state.splitToChunks} onChange={this.handleChange} />;
         }
         return (
