@@ -1,16 +1,17 @@
 import { Component } from "react";
 import { Form } from 'react-bootstrap';
 import Switcher from "../../Components/Switcher/Switcher";
+import vkbeautify from 'vkbeautify';
 
 class CSS_Route extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             mode: "Minify",
             inputText: "",
             outputText: "",
 
-         }
+        }
     }
 
     changeMode = (val) => {
@@ -27,41 +28,62 @@ class CSS_Route extends Component {
         this.setState({ [inputName]: inputVal });
     }
 
-    actionHandler = () => {//TODO: fill
-
+    minify = (cssText) => {
+        const newText = cssText
+            .replace(/([^0-9a-zA-Z\.#])\s+/g, "$1")
+            .replace(/\s([^0-9a-zA-Z\.#]+)/g, "$1")
+            .replace(/;}/g, "}")
+            .replace(/\/\*.*?\*\//g, "");
+        return newText;
     }
 
-    render() { 
-        return ( 
-            <div className="container">
-            <h1>CSS Minify/Beautify</h1>
-            <Switcher val1="Minify" val2="Beautify" func={this.changeMode} />
-            <Form>
-                <div className="row">
-                    <div className="col-md-6" style={{ display: 'inline-block' }}>
-                        <Form.Group controlId="Input_CSS">
-                            <Form.Label>Input</Form.Label>
-                            <Form.Control as="textarea" rows={9} value={this.state.inputText} name="inputText" onChange={this.handleChange} />
-                        </Form.Group>
-                        <div>
-                            <p>options will be fucking dandy in here</p>
-                        </div>
-                        <div>
-                            <input type="button" className="buttonCustom" value={this.state.mode} onClick={this.actionHandler} />
-                        </div>
-                    </div>
+    actionHandler = () => {
+        let newCss = "";
+        switch (this.state.mode) {
+            case "Minify":
+                newCss = vkbeautify.cssmin(this.state.inputText, false);
+                this.setState({ outputText: newCss });
+                break;
+            case "Beautify":
+                newCss = vkbeautify.css(this.state.inputText);
+                this.setState({ outputText: newCss });
+                break;
+            default:
+                break;
+        }
+    }
 
-                    <div className="col-md-6" style={{ display: 'inline-block' }}>
-                        <Form.Group controlId="Output_CSS">
-                            <Form.Label>Output</Form.Label>
-                            <Form.Control as="textarea" rows={9} value={this.state.outputText} readOnly />
-                        </Form.Group>
+    render() {
+        return (
+            <div className="container">
+                <h1>CSS Minify/Beautify</h1>
+                <Switcher val1="Minify" val2="Beautify" func={this.changeMode} />
+                <Form>
+                    <div className="row">
+                        <div className="col-md-6" style={{ display: 'inline-block' }}>
+                            <Form.Group controlId="Input_CSS">
+                                <Form.Label>Input</Form.Label>
+                                <Form.Control as="textarea" rows={9} value={this.state.inputText} name="inputText" onChange={this.handleChange} />
+                            </Form.Group>
+                            <div>
+                                <p>options will be fucking dandy in here</p>
+                            </div>
+                            <div>
+                                <input type="button" className="buttonCustom" value={this.state.mode} onClick={this.actionHandler} />
+                            </div>
+                        </div>
+
+                        <div className="col-md-6" style={{ display: 'inline-block' }}>
+                            <Form.Group controlId="Output_CSS">
+                                <Form.Label>Output</Form.Label>
+                                <Form.Control as="textarea" rows={9} value={this.state.outputText} readOnly />
+                            </Form.Group>
+                        </div>
                     </div>
-                </div>
-            </Form>
-        </div>
-            );
+                </Form>
+            </div>
+        );
     }
 }
- 
+
 export default CSS_Route;
