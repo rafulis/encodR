@@ -1,6 +1,8 @@
 import { Component } from "react";
 import { Form } from 'react-bootstrap';
 import Switcher from "../../Components/Switcher/Switcher";
+import vkbeautify from 'vkbeautify';
+
 
 
 class JSON_Route extends Component {
@@ -29,6 +31,24 @@ class JSON_Route extends Component {
     }
 
     actionHandler = () => {//TODO: fill
+        try {
+            JSON.parse(this.state.inputText);//checking if json is valid
+            let newJSON = "";
+            switch (this.state.mode) {
+                case "Minify":
+                    newJSON = vkbeautify.jsonmin(this.state.inputText);
+                    this.setState({ outputText: newJSON });
+                    break;
+                case "Beautify":
+                    newJSON = vkbeautify.json(this.state.inputText);
+                    this.setState({ outputText: newJSON });
+                    break;
+                default:
+                    break;
+            }
+        } catch {
+            this.setState({ outputText: "Error minifying/beautifying JSON, are you sure you entered a valid JSON input?" });
+        }
 
     }
 

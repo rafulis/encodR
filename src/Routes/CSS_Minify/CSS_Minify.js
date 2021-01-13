@@ -10,7 +10,7 @@ class CSS_Route extends Component {
             mode: "Minify",
             inputText: "",
             outputText: "",
-
+            preserveComments: false
         }
     }
 
@@ -28,20 +28,11 @@ class CSS_Route extends Component {
         this.setState({ [inputName]: inputVal });
     }
 
-    minify = (cssText) => {
-        const newText = cssText
-            .replace(/([^0-9a-zA-Z\.#])\s+/g, "$1")
-            .replace(/\s([^0-9a-zA-Z\.#]+)/g, "$1")
-            .replace(/;}/g, "}")
-            .replace(/\/\*.*?\*\//g, "");
-        return newText;
-    }
-
     actionHandler = () => {
         let newCss = "";
         switch (this.state.mode) {
             case "Minify":
-                newCss = vkbeautify.cssmin(this.state.inputText, false);
+                newCss = vkbeautify.cssmin(this.state.inputText, this.state.preserveComments);
                 this.setState({ outputText: newCss });
                 break;
             case "Beautify":
@@ -54,6 +45,10 @@ class CSS_Route extends Component {
     }
 
     render() {
+        let options="";
+        if (this.state.mode === "Minify") {
+            options = <Form.Check inline label="preserve comments" type="checkbox" id="preserveComments" name="preserveComments" checked={this.state.preserveComments} onChange={this.handleChange} />;
+        }
         return (
             <div className="container">
                 <h1>CSS Minify/Beautify</h1>
@@ -66,7 +61,7 @@ class CSS_Route extends Component {
                                 <Form.Control as="textarea" rows={9} value={this.state.inputText} name="inputText" onChange={this.handleChange} />
                             </Form.Group>
                             <div>
-                                <p>options will be fucking dandy in here</p>
+                                {options}
                             </div>
                             <div>
                                 <input type="button" className="buttonCustom" value={this.state.mode} onClick={this.actionHandler} />
