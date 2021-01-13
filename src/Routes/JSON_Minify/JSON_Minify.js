@@ -12,7 +12,10 @@ class JSON_Route extends Component {
             mode: "Minify",
             inputText: "",
             outputText: "",
-
+            convertCommas: false,
+            convertLessGreater: false,
+            convertAmpersand: false,
+            convertApostrophe: false,
         }
     }
 
@@ -37,15 +40,26 @@ class JSON_Route extends Component {
             switch (this.state.mode) {
                 case "Minify":
                     newJSON = vkbeautify.jsonmin(this.state.inputText);
-                    this.setState({ outputText: newJSON });
                     break;
                 case "Beautify":
                     newJSON = vkbeautify.json(this.state.inputText);
-                    this.setState({ outputText: newJSON });
                     break;
                 default:
                     break;
             }
+            if(this.state.convertAmpersand){
+                newJSON = newJSON.replace(/&/g, '\u0026');
+            }
+            if(this.state.convertCommas){
+                newJSON = newJSON.replace(/"/g, '\u0022');
+            }
+            if(this.state.convertApostrophe){
+                newJSON = newJSON.replace(/'/g, '\u0027');
+            }
+            if(this.state.convertLessGreater){
+                newJSON = newJSON.replace(/</g, '\u003C').replace(/>/g, '\u003E');
+            }
+            this.setState({ outputText: newJSON });
         } catch {
             this.setState({ outputText: "Error minifying/beautifying JSON, are you sure you entered a valid JSON input?" });
         }
@@ -65,7 +79,10 @@ class JSON_Route extends Component {
                                 <Form.Control as="textarea" rows={9} value={this.state.inputText} name="inputText" onChange={this.handleChange} />
                             </Form.Group>
                             <div>
-                                <p>options will be fucking dandy in here</p>
+                                <Form.Check label='Convert all " to \u0022' type="checkbox" id="convertCommas" name="convertCommas" checked={this.state.convertCommas} onChange={this.handleChange} />
+                                <Form.Check label='Convert all < and > to \u003C and \u003E' type="checkbox" id="convertLessGreater" name="convertLessGreater" checked={this.state.convertLessGreater} onChange={this.handleChange} />
+                                <Form.Check label='Convert all & to \u0026' type="checkbox" id="convertAmpersand" name="convertAmpersand" checked={this.state.convertAmpersand} onChange={this.handleChange} />
+                                <Form.Check label="Convert all ' to \u0027" type="checkbox" id="convertApostrophe" name="convertApostrophe" checked={this.state.convertApostrophe} onChange={this.handleChange} />
                             </div>
                             <div>
                                 <input type="button" className="buttonCustom" value={this.state.mode} onClick={this.actionHandler} />
