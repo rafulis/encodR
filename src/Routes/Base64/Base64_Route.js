@@ -44,14 +44,11 @@ class Base64_Route extends Component {
     unicodeBase64Encode = (text) => { return window.btoa(encodeURIComponent(text).replace(/%([0-9A-F]{2})/g, function (match, p1) { return String.fromCharCode('0x' + p1); })); }
 
     actionHandler = () => {
-        console.log("actionHandler: start");
         if (this.state.inputText !== "") {
-            console.log("actionHandler: if is true");
             let output = "";
             try {
                 switch (this.state.mode) {
                     case "Encode":
-                        console.log("actionHandler: encoding");
                         switch (this.state.charset) {
                             case "ASCII": output = btoa(this.state.inputText);
                                 break;
@@ -66,7 +63,6 @@ class Base64_Route extends Component {
                         }
                         break;
                     case "Decode":
-                        console.log("actionHandler: decoding");
                         switch (this.state.charset) {
                             case "ASCII": output = atob(this.state.inputText.replace(/\n/g, ''));
                                 break;
@@ -83,7 +79,6 @@ class Base64_Route extends Component {
                 output = "Error encoding/decoding the requested message, perhaps you are using the incorrect character set? try using UTF-8.";
             }
 
-            console.log("actionHandler: output = ", output);
             this.setState({ outputText: output });
         }
     }

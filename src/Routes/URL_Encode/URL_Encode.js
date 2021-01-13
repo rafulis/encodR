@@ -44,14 +44,11 @@ class URL_Route extends Component {
     unicodeURLEncode = (text) => { return encodeURIComponent(text).replace(/[!'()*]/g, function (c) { return ('%' + c.charCodeAt(0).toString(16).toUpperCase()); }); }
 
     actionHandler = () => {
-        console.log("actionHandler: start");
         if (this.state.inputText !== "") {
-            console.log("actionHandler: if is true");
             let output = "";
             try {
                 switch (this.state.mode) {
                     case "Encode":
-                        console.log("actionHandler: encoding");
                         switch (this.state.charset) {
                             case "ASCII": output = this.unicodeURLEncode(this.state.inputText);
                                 break;
@@ -66,7 +63,6 @@ class URL_Route extends Component {
                         }
                         break;
                     case "Decode":
-                        console.log("actionHandler: decoding");
                         switch (this.state.charset) {
                             case "ASCII": output = this.unicodeURLDecode(this.state.inputText.replace(/\n/g, ''));
                                 break;
@@ -84,7 +80,6 @@ class URL_Route extends Component {
                 output = "Error encoding/decoding the requested message, perhaps you are using the incorrect character set? try using UTF-8.";
             }
 
-            console.log("actionHandler: output = ", output);
             this.setState({ outputText: output });
         }
     }
