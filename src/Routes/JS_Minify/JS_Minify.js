@@ -10,12 +10,10 @@ class JS_Route extends Component {
             mode: "Minify",
             inputText: "",
             outputText: "",
-            mangleNames: false,
             mangleProperties: false,
             mangleFunctions: false,
             mangleTopLevel:false,
             keepComments: false,
-            keepQuotes:false,
         }
     }
 
@@ -37,24 +35,20 @@ class JS_Route extends Component {
         switch (this.state.mode) {
             case "Minify":
                 try {
-                    minify(this.state.inputText, {toplevel: this.state.mangleTopLevel}).then(res => {
-                        console.log(res);
+                    minify(this.state.inputText, {format: {comments:this.state.keepComments}, mangle: {toplevel:this.state.mangleTopLevel, keep_fnames:this.state.mangleFunctions, properties:this.state.mangleProperties}}).then(res => {
                         this.setState({ outputText: res.code });
                     });
                 } catch (e) {
                     this.setState({ outputText: "Error minifying JS, are you sure you entered a valid JS input?" })
-                    console.log("error", e)
                 }
                 break;
             case "Beautify":
                 try {
-                    minify(this.state.inputText, { format: { beautify: true } }).then(res => {
-                        console.log(res);
+                    minify(this.state.inputText, { format: { beautify: true, comments:true }, mangle: false }).then(res => {
                         this.setState({ outputText: res.code });
                     });
                 } catch (e) {
                     this.setState({ outputText: "Error beautifying JS, are you sure you entered a valid JS input?" })
-                    console.log("error", e)
                 }
                 break;
             default:
@@ -65,12 +59,12 @@ class JS_Route extends Component {
     render() {
         let options="";
         if(this.state.mode==="Minify"){
-            options = <div><Form.Check label='Mangle names' type="checkbox" id="mangleNames" name="mangleNames" checked={this.state.mangleNames} onChange={this.handleChange} />
+            options = <div>
             <Form.Check label='Mangle properties' type="checkbox" id="mangleProperties" name="mangleProperties" checked={this.state.mangleProperties} onChange={this.handleChange} />
-            <Form.Check label='Mangle functions' type="checkbox" id="mangleFunctions" name="mangleFunctions" checked={this.state.mangleFunctions} onChange={this.handleChange} />
-            <Form.Check label='Mangle variables in top level scope' type="checkbox" id="mangleTopLevel" name="mangleTopLevel" checked={this.state.mangleTopLevel} onChange={this.handleChange} />
+            <Form.Check label='Keep function names when mangling (legacy, without ES5< support)' type="checkbox" id="mangleFunctions" name="mangleFunctions" checked={this.state.mangleFunctions} onChange={this.handleChange} />
+            <Form.Check label='Mangle top level scope' type="checkbox" id="mangleTopLevel" name="mangleTopLevel" checked={this.state.mangleTopLevel} onChange={this.handleChange} />
             <Form.Check label='Keep comments' type="checkbox" id="keepComments" name="keepComments" checked={this.state.keepComments} onChange={this.handleChange} />
-            <Form.Check label='Keep original quotes' type="checkbox" id="keepQuotes" name="keepQuotes" checked={this.state.keepQuotes} onChange={this.handleChange} /></div>
+            </div>
         } else {
 
         }
