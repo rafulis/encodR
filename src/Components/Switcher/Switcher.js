@@ -2,7 +2,6 @@ import "./Switcher.scss";
 
 const Switcher = (props) => {
     const changeInput = (e) => {
-        console.log("value: ", e.target.value);
         props.func(e.target.value);
     }
     return (<div>
