@@ -7,7 +7,7 @@ This is intended to be used as a serverless, one paged site, based on ReactJS.
 There's nothing fancy here to be honest, just did it out of boredom and the will to fiddle around with ReactJS
 
 
-###Featues:
+### Features:
 - URL encode / decode
 - Base64 encode / decode
 - JavaScript code minification / beautification
